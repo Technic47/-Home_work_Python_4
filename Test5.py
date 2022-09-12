@@ -6,6 +6,7 @@
 # Задача - сформировать файл, содержащий сумму многочленов.
 
 from random import randint
+from numpy import roots
 
 
 class Equation:
@@ -42,7 +43,7 @@ class Text:
         self.path = path
         self.text = ''
         self.numbers = []
-        self.result = []
+        self.coefficients = []
 
     def split(self):
         """
@@ -79,8 +80,8 @@ class Text:
         numbers2 = list_of_numbers
         for i in range(0, len(self.numbers), 2):
             summ = self.numbers[i] + numbers2[i]
-            self.result.append(summ)
-        print(self.result)
+            self.coefficients.append(summ)
+        print(f'Coefficients of your equation are:\n{self.coefficients}')
 
     def send_summ(self, write_path):
         """
@@ -89,14 +90,23 @@ class Text:
         :return:
         """
         with open(write_path, 'w') as data:
-            index = (len(self.result) - 1)
-            for i in range(len(self.result)):
-                if i < len(self.result) - 1:
-                    data.write(f'{self.result[i]}*x^{index} + ')
+            index = (len(self.coefficients) - 1)
+            for i in range(len(self.coefficients)):
+                if i < len(self.coefficients) - 1:
+                    data.write(f'{self.coefficients[i]}*x^{index} + ')
                 else:
-                    data.write(f'{self.result[i]} ')
+                    data.write(f'{self.coefficients[i]} ')
                 index -= 1
             data.write(' = 0')
+
+    def find_roots(self):
+        """
+        Function calculate roots of the equation.
+        NumPy
+        :return:
+        """
+        res = roots(self.coefficients)
+        print(f'Roots of the equation are:\n{res}')
 
 
 text1 = Text(r'C:\Users\Pavel\Documents\GeekBrain\Python_Homework\Seminar4\Test4_1.txt')
@@ -112,3 +122,5 @@ text2.get_numbers()
 
 text1.summ(text2.numbers)
 text1.send_summ(r'C:\Users\Pavel\Documents\GeekBrain\Python_Homework\Seminar4\Test4_3.txt')
+
+text1.find_roots()
